@@ -1,0 +1,21 @@
+<h1>Lists</h1>
+
+<div class="container">
+  <form action="/lists" method="POST" class="container">
+    <%= csrf_token_hidden_input %>
+    <input type="text" name="title" placeholder="Title"/>
+    <input type="submit" value="Create"/>
+  </form>
+</div>
+
+<div class="container">
+  <ul>
+    <% @lists.sort_by(&:title).each do |l| %>
+      <li class="blue-orb">
+        <a href="/lists/<%= l.id %>">
+          <%= l.title %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</div>

@@ -1,0 +1,31 @@
+<h1><%= @list.title %></h1>
+
+<div class="container">
+  <p>Created by: <%= @list.creator %></p>
+</div>
+
+<div class="container">
+  <form action="/lists/<%= @list.id %>/items" method="POST" class="container">
+    <%= csrf_token_hidden_input %>
+    <input type="text" name="title" placeholder="Title"/>
+    <input type="submit" value="Create"/>
+  </form>
+</div>
+
+<div class="container">
+  <ol>
+    <% @list.list_items.each do |li| %>
+      <li>
+        <form action="/lists/<%= @list.id %>/items/<%= li.id %>/check" method="POST">
+          <%= csrf_token_hidden_input %>
+
+          <label>
+            <input type="hidden" name="state" value=""/>
+            <input type="checkbox" onclick="this.form.submit()"/>
+            <%= li.title %>
+          </label>
+        </form>
+      </li>
+    <% end %>
+  </ol>
+</div>
