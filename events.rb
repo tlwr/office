@@ -7,8 +7,8 @@ class Office < Sinatra::Base
   end
 end
 
-def jquo(p)
-  "「#{p}」"
+def jquo(phrase)
+  "「#{phrase}」"
 end
 
 class Event < Sequel::Model
