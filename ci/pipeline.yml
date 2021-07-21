@@ -1,0 +1,175 @@
+---
+resource_types:
+  - name: registry-tag
+    type: registry-image
+    source:
+      repository: tlwr/registry-tag-resource
+      tag: 1593696431
+
+resources:
+  - name: ruby-img-tag
+    type: registry-tag
+    icon: tag
+    check_every: 15m
+    source:
+      uri: https://hub.docker.com/v2/repositories/library/ruby
+      pages: 3
+      regexp: '^[0-9]+[.][0-9]+[.][0-9]+-alpine$'
+      semver:
+        matcher: '>= 3.0'
+
+  - name: office-src
+    type: git
+    icon: git
+    source:
+      uri: https://github.com/tlwr/office.git
+      branch: main
+
+  - name: office-img
+    type: registry-image
+    icon: docker
+    source:
+      repository: ghcr.io/tlwr/office
+      username: ((docker-secrets.username))
+      password: ((docker-secrets.password))
+
+  - name: cloud-cfg
+    type: git
+    icon: git
+    source:
+      branch: main
+      uri: https://github.com/tlwr/www.tobys.cloud.git
+
+jobs:
+  - name: test
+    serial: true
+    public: true
+    plan:
+      - get: office-src
+        trigger: true
+
+      - task: test
+        privileged: true
+        config:
+          platform: linux
+
+          image_resource:
+            type: registry-image
+            source:
+              repository: ruby
+
+          inputs:
+            - name: office-src
+              path: .
+
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                make deps
+                make test
+
+  - name: build
+    serial: true
+    public: true
+    plan:
+      - get: office-src
+        passed: [test]
+        trigger: true
+
+      - get: ruby-img-tag
+        trigger: true
+
+      - load_var: ruby-version
+        file: ruby-img-tag/tag
+
+      - task: build-img
+        privileged: true
+        config:
+          platform: linux
+
+          image_resource:
+            type: registry-image
+            source:
+              repository: vito/oci-build-task
+              tag: 0.3.0
+
+          inputs:
+            - name: office-src
+              path: .
+
+          outputs:
+            - name: image
+
+          params:
+            BUILD_ARG_ruby_version: ((.:ruby-version))
+
+          run:
+            path: build
+
+      - put: office-img
+        params:
+          image: image/image.tar
+          additional_tags: office-src/.git/ref
+        get_params:
+          skip_download: true
+
+  - name: deploy
+    serial: true
+    plan:
+      - get: office-img
+        trigger: true
+        passed: [build]
+        params:
+          skip_download: true
+
+      - get: office-src
+        passed: [build]
+
+      - get: cloud-cfg
+
+      - task: add-tag-to-kubeyaml
+        privileged: true
+        config:
+          platform: linux
+
+          image_resource:
+            type: registry-image
+            source:
+              repository: alpine
+              tag: 3.12
+
+          inputs:
+            - name: office-src
+
+          outputs:
+            - name: kubeyaml
+
+          run:
+            path: ash
+            args:
+              - -e
+              - -u
+              - -x
+              - -c
+              - |
+                tag="$(cat office-src/.git/ref)"
+
+                sed \
+                  "s/@tag/$tag/" \
+                  office-src/k8s/02-office.yaml > kubeyaml/kubeyaml.yaml
+
+      - task: kubectl-apply
+        file: cloud-cfg/concourse/tasks/kubectl-apply.yaml
+        params:
+          KUBEYAML_PATH: kubeyaml.yaml
+          KUBE_CONFIG: ((office-k8s.kube-config))
+          NAMESPACE: office
+
+      - task: kubectl-rollout-restart
+        file: cloud-cfg/concourse/tasks/kubectl-rollout-restart.yaml
+        params:
+          KUBE_CONFIG: ((office-k8s.kube-config))
+          RESOURCE: statefulset/office
+          NAMESPACE: office
