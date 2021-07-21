@@ -1,7 +1,8 @@
 #!/bin/ash
+set -ueo pipefail
 
-/app/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &
-until /app/tailscale up --authkey=${TAILSCALE_AUTHKEY} --hostname=office
+/opt/office/app/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &
+until /opt/office/app/bin/tailscale up --authkey=${TAILSCALE_AUTHKEY} --hostname=office
 do
     sleep 0.1
 done
