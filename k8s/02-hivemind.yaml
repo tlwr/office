@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: office
+  namespace: office
+  labels:
+    app: office
+spec:
+  ports:
+    - port: 8080
+      targetPort: 9292
+      name: http
+  selector:
+    app: office
+...
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: office
+  namespace: office
+spec:
+  selector:
+    matchLabels:
+      app: office
+
+  serviceName: office
+
+  replicas: 1
+  revisionHistoryLimit: 3
+
+  template:
+    metadata:
+      labels:
+        app: office
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/tlwr/office:@tag
+          imagePullPolicy: Always
+
+          env:
+            - name: RACK_ENV
+              value: production
+
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: office
+                  key: session
+
+          ports:
+            - containerPort: 9292
+
+          volumeMounts:
+            - name: fs
+              mountPath: /opt/office/fs
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9292
+            initialDelaySeconds: 3
+            periodSeconds: 15
+
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: doks.digitalocean.com/node-pool
+                    operator: In
+                    values:
+                      - standard-2gb
+
+  volumeClaimTemplates:
+    - metadata:
+        name: fs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+...
