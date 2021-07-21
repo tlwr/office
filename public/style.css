@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   display: grid;
   grid-template-areas:
     'header header header'
-    'breadcrumbs breadcrumbs breadcrumbs'
     'menu main main';
+  grid-template-rows: 62px auto min-content;
+  grid-template-columns: 250px min-content;
   grid-gap: 0;
   padding: 0;
   font-family: system-ui, monospace;
@@ -13,11 +19,6 @@ body {
 
 body>header {
   grid-area: header;
-}
-
-body>nav#breadcrumbs {
-  grid-area: breadcrumbs;
-  border-bottom: 1px solid grey;
 }
 
 body>nav#menu {
@@ -31,7 +32,6 @@ body>nav#menu {
 
 main {
   grid-area: main;
-  min-height: 80vh;
 }
 
 header>nav, main {
