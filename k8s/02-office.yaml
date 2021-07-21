@@ -41,6 +41,10 @@ spec:
           image: ghcr.io/tlwr/office:@tag
           imagePullPolicy: Always
 
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN", "SYS_MODULE"]
+
           env:
             - name: RACK_ENV
               value: production
