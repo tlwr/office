@@ -16,7 +16,7 @@ RUN mkdir -p /opt/office/app && \
 WORKDIR /opt/office/app
 
 COPY --from=tailscale /app/tailscaled /opt/office/app/bin/tailscaled
-COPY --from=tailscale /app/tailscale /opt/office/app/tailscale
+COPY --from=tailscale /app/tailscale /opt/office/app/bin/tailscale
 RUN mkdir -p /var/run/tailscale
 RUN mkdir -p /var/cache/tailscale
 RUN mkdir -p /var/lib/tailscale
