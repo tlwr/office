@@ -5,8 +5,7 @@ body {
   grid-template-areas:
     'header header header'
     'breadcrumbs breadcrumbs breadcrumbs'
-    'menu main main'
-    'footer footer footer';
+    'menu main main';
   grid-gap: 0;
   padding: 0;
   font-family: system-ui, monospace;
@@ -28,11 +27,6 @@ body>nav#menu {
   padding: 10px;
   display: flex;
   flex-direction: column;
-}
-
-body>footer {
-  grid-area: footer;
-  border-top: 1px solid grey;
 }
 
 main {
