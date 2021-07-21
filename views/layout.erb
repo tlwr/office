@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/reset.css" type="text/css">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="icon" href="https://assets.tobys.cloud/favicon.ico">
+    <title>office</title>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <span>Office</span>
+      </nav>
+    </header>
+
+    <nav id="breadcrumbs">
+      <% (@breadcrumbs || []).each do |bc| %>
+        <a href="<%= bc.href %>"><%= bc.title %></a>
+      <% end %>
+    </nav>
+
+    <nav id="menu">
+      <a href="/lists">Lists</a>
+      <a href="/meals">Meals</a>
+      <a href="/metrics">Metrics</a>
+      <hr>
+      <a href="/jobs">Jobs</a>
+      <a href="/back-office">Back Office</a>
+    </nav>
+
+    <main><%= yield %></main>
+
+    <footer></footer>
+  </body>
+</html>
