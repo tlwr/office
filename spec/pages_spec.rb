@@ -5,7 +5,7 @@ RSpec.describe "pages" do
     it "renders" do
       get "/"
       expect(last_response).to be_ok
-      expect(last_response.body).to match(/.span.office..span./)
+      expect(last_response.body).to match(/i shall do as you recommend/i)
     end
   end
 end
