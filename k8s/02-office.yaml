@@ -51,7 +51,7 @@ spec:
                   name: office
                   key: session
 
-            - name: TAILSCALE
+            - name: TAILSCALE_AUTHKEY
               valueFrom:
                 secretKeyRef:
                   name: office
