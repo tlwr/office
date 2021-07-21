@@ -11,14 +11,6 @@ COPY $PWD/Gemfile.lock .
 
 RUN bundle install
 
-COPY $PWD/package.json .
-
-RUN yarn install
-
-COPY $PWD/postcss.config.js .
-COPY $PWD/css/style.css ./css/style.css
-RUN yarn run css:build
-
 COPY $PWD .
 
 ENTRYPOINT ["make", "run"]
