@@ -51,6 +51,12 @@ spec:
                   name: office
                   key: session
 
+            - name: TAILSCALE
+              valueFrom:
+                secretKeyRef:
+                  name: office
+                  key: tailscale_auth_key
+
           ports:
             - containerPort: 9292
 
