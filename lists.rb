@@ -29,7 +29,7 @@ class Office < Sinatra::Base
     if params[:delete]
       li.delete
     else
-      li.checked = params[:state] == "complete"
+      li.mark(user: current_user, checked: params[:state] == "complete")
       li.save
     end
 

@@ -76,6 +76,7 @@ RSpec.describe "lists" do
 
         @list_item.reload
         expect(@list_item.checked).to eq(true)
+        expect(Event.last.metadata[:checked]).to eq(true)
 
         post "/lists/#{@list.id}/items/#{@list_item.id}/check", {
           "authenticity_token" => token_from_current_page,
@@ -86,6 +87,7 @@ RSpec.describe "lists" do
 
         @list_item.reload
         expect(@list_item.checked).to eq(false)
+        expect(Event.last.metadata[:checked]).to eq(false)
 
         post "/lists/#{@list.id}/items/#{@list_item.id}/check", {
           "authenticity_token" => token_from_current_page,

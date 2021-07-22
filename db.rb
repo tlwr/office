@@ -48,7 +48,7 @@ class ListItem < Sequel::Model
       :altered_list_item,
       list_item_id: id,
       user_id: @altered_by,
-      state: checked,
+      checked: checked,
     )
   end
 end

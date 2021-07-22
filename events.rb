@@ -16,9 +16,10 @@ class Event < Sequel::Model
     case kind.to_sym
     when :created_list
       "#{list.creator} created #{jquo(list.title)}"
-    when :created_list_item
+    when :altered_list_item
       li = list_item
-      "#{li.creator} created #{jquo(li.title)} in #{jquo(li.list.title)}"
+      verb = metadata[:checked] ? "checked" : "unchecked"
+      "#{li.creator} #{verb} #{jquo(li.title)} in #{jquo(li.list.title)}"
     end
   end
 
