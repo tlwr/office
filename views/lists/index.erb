@@ -11,7 +11,7 @@
 <div class="container">
   <ul>
     <% @lists.sort_by(&:title).each do |l| %>
-      <li class="blue-orb">
+      <li class="clipboard jicon">
         <a href="/lists/<%= l.id %>">
           <%= l.title %>
         </a>

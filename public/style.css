@@ -108,11 +108,72 @@ form>.container {
   margin-bottom: 5px;
 }
 
-li.blue-orb:before {
-  content: "🔵";
+li.orb::before, li.jicon::before {
+  position: relative;
+  top: 5px;
 }
 
-li.blue-orb {
+li.blue.orb:before {
+  content: url("/blue.png");
+}
+
+li.grey.orb:before {
+  content: url("/grey.png");
+}
+
+li.red.orb:before {
+  content: url("/red.png");
+}
+
+li.yellow.orb:before {
+  content: url("/yellow.png");
+}
+
+li.orb, li.jicon {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+li.clipboard.jicon:before {
+  content: url("/clipboard.png");
+}
+
+input[type="checkbox"].orb {
+  display: none
+}
+
+input[type="checkbox"].orb + span::before {
+  background-image: url("grey.png");
+  background-position: left center;
+  background-size: auto 100%;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  content: "";
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+
+input[type="checkbox"].orb:checked + span::before {
+  background-image: url("blue.png");
+}
+
+input[type="submit"].inline.icon {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  top: 5;
+  position: relative;
+  padding-left: 0;
+  padding-right: 0;
+  top: -3px;
+}
+
+input[type="submit"].inline.icon:hover {
+  background: lightgrey;
+}
+
+hr {
+  border-top-style: dotted;
 }
