@@ -1,0 +1,48 @@
+<h1>Meals</h1>
+
+<div class="container">
+  <a href="/meals/new">Record meal</a>
+</div>
+
+<hr>
+
+<div class="container">
+  <p><%= @calories_today&.to_i || 0 %> calories consumed today</p>
+</div>
+
+<hr>
+
+<% if @latest.empty? %>
+  <div class="container">
+    <p>No meals recorded</p>
+  </div>
+<% else %>
+  <div class="container nt">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Calories</th>
+          <th>Meal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @latest.each do |m| %>
+          <tr>
+            <td><%= m.created_at.strftime("%F") %></td>
+            <td><%= m.created_at.strftime("%H:%M") %></td>
+            <td><%= m.calorie_estimate.to_i %></td>
+            <td><%= m.description.gsub(/\n/, "; ").strip %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <div class="container">
+    <p>Total of <%= @count %> meals recorded</p>
+  </div>
+<% end %>

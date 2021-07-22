@@ -98,3 +98,13 @@ class Event < Sequel::Model
     values[:kind].to_sym
   end
 end
+
+class Meal < Sequel::Model
+  def after_create
+    Event.record(
+      :consumed_meal,
+      meal_id: id,
+      user_id: consumer,
+    )
+  end
+end

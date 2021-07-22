@@ -40,11 +40,20 @@ class Event < Sequel::Model
     when :created_list_item
       "#{user} created #{jquo(list_item_title)} in #{jquo(list.title)}"
     when :altered_list_item
-      li = list_item
       verb = metadata[:checked] ? "checked" : "unchecked"
       "#{user} #{verb} #{jquo(list_item_title)} in #{jquo(list.title)}"
     when :deleted_list_item
       "#{user} deleted #{jquo(list_item_title)} in #{jquo(list.title)}"
+    when :consumed_meal
+      d = meal.created_at.strftime("%F")
+      t = meal.created_at.strftime("%H:%M")
+      if d == created_at.strftime("%F") && t == created_at.strftime("%H:%M")
+        "#{user} consumed #{meal.calorie_estimate.to_i} calories"
+      elsif d == created_at.strftime("%F")
+        "#{user} consumed #{meal.calorie_estimate.to_i} calories at #{t}"
+      else
+        "#{user} consumed #{meal.calorie_estimate.to_i} calories on #{d} at #{t}"
+      end
     end
   end
 
@@ -54,6 +63,8 @@ class Event < Sequel::Model
       list
     when :created_list_item, :altered_list_item, :deleted_list_item
       list_item_title
+    when :consumed_meal
+      meal
     end
   end
 
@@ -67,6 +78,10 @@ class Event < Sequel::Model
 
   def list_item_title
     metadata[:list_item_title] || list_item.title
+  end
+
+  def meal
+    @meal ||= Meal.find(id: metadata[:meal_id])
   end
 
   def user
