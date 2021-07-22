@@ -20,6 +20,9 @@ RSpec/BeforeAfterAll:
 RSpec/InstanceVariable:
   Enabled: false
 
+Style/DateTime:
+  Enabled: false
+
 Style/SymbolArray:
   Enabled: false
 
