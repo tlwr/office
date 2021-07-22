@@ -36,15 +36,20 @@ class ListItem < Sequel::Model
     Event.record(:created_list_item, list_item_id: id)
   end
 
-  def complete(user)
-    self.completed = true
-    @completed_by = user
+  def mark(user:, checked:)
+    self.checked = checked
+    @altered_by = user
   end
 
   def after_save
-    return unless @completed_by
+    return unless @altered_by
 
-    Event.record(:completed_list_item, list_item_id: id, user_id: @completed_by)
+    Event.record(
+      :altered_list_item,
+      list_item_id: id,
+      user_id: @altered_by,
+      state: checked,
+    )
   end
 end
 
