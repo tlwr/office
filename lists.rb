@@ -18,12 +18,21 @@ class Office < Sinatra::Base
 
   post "/lists/:id/items" do
     l = List.find(id: params[:id])
-    l.add_item(title: params[:title], creator: current_user)
+    title = params[:title].strip
+    l.add_item(title: title, creator: current_user) unless title.empty?
     redirect "/lists/#{l.id}"
   end
 
   post "/lists/:list_id/items/:list_item_id/check" do
     li = ListItem.find(id: params[:list_item_id], list_id: params[:list_id])
+
+    if params[:delete]
+      li.delete
+    else
+      li.checked = params[:state] == "complete"
+      li.save
+    end
+
     redirect "/lists/#{li.list_id}"
   end
 end

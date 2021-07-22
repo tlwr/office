@@ -12,18 +12,28 @@
   </form>
 </div>
 
+<hr>
+
+<% if @list.list_items.empty? %>
+  <div class="container"><p>This list is empty</p></div>
+<% end %>
+
 <div class="container">
   <ol>
     <% @list.list_items.each do |li| %>
       <li>
         <form action="/lists/<%= @list.id %>/items/<%= li.id %>/check" method="POST">
           <%= csrf_token_hidden_input %>
-
-          <label>
-            <input type="hidden" name="state" value=""/>
-            <input type="checkbox" onclick="this.form.submit()"/>
-            <%= li.title %>
+          <label for="complete-<%= @list.id %>-<%= li.id %>">
+            <input type="checkbox" class="orb"
+                   id="complete-<%= @list.id %>-<%= li.id %>"
+                   onclick="this.form.submit()"
+                   name="state"
+                   <% if li.checked %>checked<% end %>
+                   value="complete"/>
+            <span><%= li.title %></span>
           </label>
+          <input type="submit" class="inline icon" name="delete" value="❌"/>
         </form>
       </li>
     <% end %>
