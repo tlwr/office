@@ -113,19 +113,23 @@ li.orb::before, li.jicon::before {
   top: 5px;
 }
 
-li.blue.orb:before {
+li.jicon.blue::before, li.blue.orb::before {
   content: url("/blue.png");
 }
 
-li.grey.orb:before {
+li.jicon.grey::before, li.grey.orb::before {
   content: url("/grey.png");
 }
 
-li.red.orb:before {
+li.jicon.green::before, li.green.orb::before {
+  content: url("/green.png");
+}
+
+li.jicon.red::before, li.red.orb::before {
   content: url("/red.png");
 }
 
-li.yellow.orb:before {
+li.jicon.yellow::before, li.yellow.orb::before {
   content: url("/yellow.png");
 }
 
