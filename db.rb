@@ -33,7 +33,13 @@ class ListItem < Sequel::Model
   many_to_one :list, class: :List, key: :list_id
 
   def after_create
-    Event.record(:created_list_item, list_item_id: id)
+    Event.record(
+      :created_list_item,
+      list_item_id: id,
+      list_id: list.id,
+      list_item_title: title,
+      user_id: creator,
+    )
   end
 
   def mark(user:, checked:)
@@ -47,8 +53,22 @@ class ListItem < Sequel::Model
     Event.record(
       :altered_list_item,
       list_item_id: id,
+      list_id: list.id,
+      list_item_title: title,
       user_id: @altered_by,
       checked: checked,
+    )
+  end
+
+  def destroy_by(user:)
+    destroy
+
+    Event.record(
+      :deleted_list_item,
+      list_item_id: id,
+      list_item_title: title,
+      list_id: list.id,
+      user_id: user,
     )
   end
 end

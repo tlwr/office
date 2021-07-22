@@ -23,11 +23,11 @@ class Office < Sinatra::Base
     redirect "/lists/#{l.id}"
   end
 
-  post "/lists/:list_id/items/:list_item_id/check" do
+  post "/lists/:list_id/items/:list_item_id" do
     li = ListItem.find(id: params[:list_item_id], list_id: params[:list_id])
 
     if params[:delete]
-      li.delete
+      li.destroy_by(user: current_user)
     else
       li.mark(user: current_user, checked: params[:state] == "complete")
       li.save

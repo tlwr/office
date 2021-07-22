@@ -66,7 +66,7 @@ RSpec.describe "lists" do
         get "/lists/#{@list.id}"
         expect(last_response).to be_ok
 
-        post "/lists/#{@list.id}/items/#{@list_item.id}/check", {
+        post "/lists/#{@list.id}/items/#{@list_item.id}", {
           "authenticity_token" => token_from_current_page,
           "state" => "complete",
         }
@@ -78,7 +78,7 @@ RSpec.describe "lists" do
         expect(@list_item.checked).to eq(true)
         expect(Event.last.metadata[:checked]).to eq(true)
 
-        post "/lists/#{@list.id}/items/#{@list_item.id}/check", {
+        post "/lists/#{@list.id}/items/#{@list_item.id}", {
           "authenticity_token" => token_from_current_page,
         }
 
@@ -89,7 +89,7 @@ RSpec.describe "lists" do
         expect(@list_item.checked).to eq(false)
         expect(Event.last.metadata[:checked]).to eq(false)
 
-        post "/lists/#{@list.id}/items/#{@list_item.id}/check", {
+        post "/lists/#{@list.id}/items/#{@list_item.id}", {
           "authenticity_token" => token_from_current_page,
           "delete" => true,
         }
@@ -98,6 +98,7 @@ RSpec.describe "lists" do
         follow_redirect!
 
         expect(ListItem.find(id: @list_item.id)).to be_nil
+        expect(Event.last.kind).to eq(:deleted_list_item)
       end
     end
   end

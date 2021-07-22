@@ -22,7 +22,7 @@
   <ol>
     <% @list.list_items.each do |li| %>
       <li>
-        <form action="/lists/<%= @list.id %>/items/<%= li.id %>/check" method="POST">
+        <form action="/lists/<%= @list.id %>/items/<%= li.id %>" method="POST">
           <%= csrf_token_hidden_input %>
           <label for="complete-<%= @list.id %>-<%= li.id %>">
             <input type="checkbox" class="orb"

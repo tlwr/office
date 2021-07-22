@@ -1,0 +1,12 @@
+<h1>Events</h1>
+
+<div class="container">
+  <ul>
+    <% @latest.each do |e| %>
+      <li class="<%= icon_for_event(e) %> jicon">
+        <%= e.nice_ts %>
+        <%= e.nice %>
+      </li>
+    <% end %>
+  </ul>
+</div>
