@@ -1,5 +1,4 @@
 require "date"
-require_relative "spec_helper"
 
 RSpec.describe "meals" do
   describe "creating a meal" do

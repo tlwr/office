@@ -1,5 +1,3 @@
-require_relative "spec_helper"
-
 RSpec.describe "lists" do
   describe "creating a list" do
     it "creates an event" do

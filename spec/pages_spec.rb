@@ -1,5 +1,3 @@
-require_relative "spec_helper"
-
 RSpec.describe "pages" do
   describe "index" do
     it "renders" do
