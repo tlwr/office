@@ -17,6 +17,8 @@ end
 require_relative "db"
 
 require_relative "authentication"
+
+require_relative "activities"
 require_relative "events"
 require_relative "health"
 require_relative "lists"

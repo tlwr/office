@@ -1,0 +1,43 @@
+<h1>New meal</h1>
+
+<div class="container">
+  <form action="/activities" method="POST" class="container">
+    <%= csrf_token_hidden_input %>
+
+    <div class="container">
+      <label>
+        Timestamp
+        <br>
+        <input type="datetime-local" name="timestamp" step="15"/>
+      </label>
+    </div>
+
+    <div class="container">
+      <label>
+        Description
+        <br>
+        <textarea name="description" rows="12" cols="48"></textarea>
+      </label>
+    </div>
+
+    <div class="container">
+      <label>
+        Duration (minutes)
+        <br>
+        <input type="number" name="duration"/>
+      </label>
+    </div>
+
+    <div class="container">
+      <label>
+        Calorie estimate
+        <br>
+        <input type="number" name="calorie-estimate" value="0"/>
+      </label>
+    </div>
+
+    <div class="container">
+      <input type="submit" value="Record"/>
+    </div>
+  </form>
+</div>

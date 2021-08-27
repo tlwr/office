@@ -108,3 +108,13 @@ class Meal < Sequel::Model
     )
   end
 end
+
+class Activity < Sequel::Model
+  def after_create
+    Event.record(
+      :did_activity,
+      activity_id: id,
+      user_id: doer,
+    )
+  end
+end

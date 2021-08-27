@@ -54,6 +54,17 @@ class Event < Sequel::Model
       else
         "#{user} consumed #{meal.calorie_estimate.to_i} calories on #{d} at #{t}"
       end
+    when :did_activity
+      d = activity.created_at.strftime("%F")
+      t = activity.created_at.strftime("%H:%M")
+      l = activity.duration.to_i
+      if d == created_at.strftime("%F") && t == created_at.strftime("%H:%M")
+        "#{user} expended #{activity.calorie_estimate.to_i} calories over #{l} minutes"
+      elsif d == created_at.strftime("%F")
+        "#{user} expended #{activity.calorie_estimate.to_i} calories at #{t} over #{l} minutes"
+      else
+        "#{user} expended #{activity.calorie_estimate.to_i} calories on #{d} at #{t} over #{l} minutes"
+      end
     end
   end
 
@@ -65,6 +76,8 @@ class Event < Sequel::Model
       list_item_title
     when :consumed_meal
       meal
+    when :did_activity
+      activity
     end
   end
 
@@ -82,6 +95,10 @@ class Event < Sequel::Model
 
   def meal
     @meal ||= Meal.find(id: metadata[:meal_id])
+  end
+
+  def activity
+    @activity ||= Activity.find(id: metadata[:activity_id])
   end
 
   def user
